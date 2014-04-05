@@ -89,9 +89,9 @@ public class Table {
                         .add("primaryKey", MapBuilder.<String, Object>create()
                                 .add("names", primaryKeyFieldNames)
                                 .add("values", primaryKey)
-                                .build())
+                                .toHashMap())
                         .add("fields", rowContent)
-                        .build(),
+                        .toHashMap(),
                 "za.co.no9.db.Table.UpdateRow.ftl");
     }
 
@@ -102,8 +102,8 @@ public class Table {
                         .add("primaryKey", MapBuilder.<String, Object>create()
                                 .add("names", primaryKeyFieldNames)
                                 .add("values", primaryKey)
-                                .build())
-                        .build(),
+                                .toHashMap())
+                        .toHashMap(),
                 "za.co.no9.db.Table.DeleteRow.ftl");
     }
 
@@ -125,7 +125,7 @@ public class Table {
             String output = FreeMarkerUtils.template(MapBuilder.<String, Object>create()
                     .add("tableName", tableMetaData.tableName())
                     .add("fields", row)
-                    .build(), "za.co.no9.db.Table.InsertRow.ftl");
+                    .toHashMap(), "za.co.no9.db.Table.InsertRow.ftl");
             try (Statement statement = database.getConnection().createStatement()) {
                 statement.executeUpdate(output);
                 ResultSet keys = statement.getGeneratedKeys();
