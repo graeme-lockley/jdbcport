@@ -1,0 +1,22 @@
+- new-handler: za.co.no9.jfixture.JDBCHandler
+
+- jdbc-connect:
+    driver: org.h2.Driver
+    url: 'jdbc:h2:mem:'
+    username: sa
+    autoclose: false
+
+- jdbc-create-table:
+    name: people
+    fields:
+      id: 'bigint not null primary key auto_increment'
+      first_name: 'varchar(50)'
+      surname: 'varchar(50)'
+      employerID: 'bigint'
+
+- jdbc-create-table:
+    name: employers
+    fields:
+      id: 'bigint not null primary key auto_increment'
+      name: 'varchar(50)'
+      creation_date: 'timestamp'

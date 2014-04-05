@@ -1,0 +1,7 @@
+- include: 'resource:databaseSetup.yaml'
+
+- jdbc-insert:
+    name: employers
+    rows:
+      - {name: 'ACME Publishing'}
+      - {name: 'ACME Consulting', creation_date: '2014-01-06 14:22:11'}
