@@ -1,4 +1,4 @@
-# jfixtures-sample
+# jdbcport
 
-This project shows off how to use jfixtures to develop a (simple) database based application.
-
+A (very) simple ORM to support a hexagonal architecture style using a simple abstraction of database-table-row with
+associated CRUD operations.
