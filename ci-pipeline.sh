@@ -26,6 +26,9 @@ case $1 in
 			BRANCH_NAME=RC-`date "+%Y%m%d%H%M%S"`
 			echo "branch: info: Branch name: $BRANCH_NAME"
 			git branch $BRANCH_NAME
+
+			echo "branch: info: Switching to branch: $BRANCH_NAME"
+			git checkout $BRANCH_NAME
 		fi
 
 		;;
