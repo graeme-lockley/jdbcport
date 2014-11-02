@@ -6,6 +6,7 @@ case $1 in
 		UNSTAGED_CHANGES=`git status | grep "Changes not staged for commit" | wc -l`
 		CHANGES_TO_BE_COMMITTED=`git status | grep "Changes to be committed" | wc -l`
 		UNTRACKED_CHANGES=`git status | grep "Untracked files:" | wc -l`
+		NEED_TO_PUSH=`git status | grep "use \"git push\" to publish your local commits" | wc -l`
 		if [ $BRANCH != '1' ]
 		then
 			echo "branch: error: Unable to branch as you are Not on branch master"
@@ -18,6 +19,9 @@ case $1 in
 		elif [ $UNTRACKED_CHANGES = '1' ]
 		then
 			echo "branch: error: Unable to branch as you have untracked changes on branch master"
+		elif [ $NEED_TO_PUSH = '1' ]
+		then
+			echo "branch: error: Unable to branch as you have committed changes which you need to push to the remote repository"
 		else
 			BRANCH_NAME=RC-`date "+%Y%m%d%H%M%S"`
 			echo "branch: info: Branch name: $BRANCH_NAME"
