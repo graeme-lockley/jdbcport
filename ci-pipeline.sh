@@ -25,6 +25,7 @@ case $1 in
 		else
 			BRANCH_NAME=RC-`date "+%Y%m%d%H%M%S"`
 			echo "branch: info: Branch name: $BRANCH_NAME"
+			git branch $BRANCH_NAME
 		fi
 
 		;;
