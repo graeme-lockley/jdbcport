@@ -1,6 +1,29 @@
 #!/bin/bash
 
 case $1 in
+	"branch")
+		BRANCH=`git status | grep "On branch master" | wc -l`
+		UNSTAGED_CHANGES=`git status | grep "Changes not staged for commit" | wc -l`
+		CHANGES_TO_BE_COMMITTED=`git status | grep "Changes to be committed" | wc -l`
+		UNTRACKED_CHANGES=`git status | grep "Untracked files:" | wc -l`
+		if [ $BRANCH != '1' ]
+		then
+			echo "branch: error: Unable to branch as you are Not on branch master"
+		elif [ $UNSTAGED_CHANGES = '1' ]
+		then
+			echo "branch: error: Unable to branch as you have changes that are not staged for commit"
+		elif [ $CHANGES_TO_BE_COMMITTED = '1' ]
+		then
+			echo "branch: error: Unable to branch as you have changes on branch master that have yet to be committed"
+		elif [ $UNTRACKED_CHANGES = '1' ]
+		then
+			echo "branch: error: Unable to branch as you have untracked changes on branch master"
+		else
+			BRANCH_NAME=RC-`date "+%Y%m%d%H%M%S"`
+			echo "branch: info: Branch name: $BRANCH_NAME"
+		fi
+
+		;;
 	"help"| "")
 		echo "This is a CI Pipeline which is versioned as part of a project.  The intent of this script is to provide a number"
 		echo "of tasks that can be called from a CI server without needing to be dependent on any one CI server."
