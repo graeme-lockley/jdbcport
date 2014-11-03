@@ -29,9 +29,11 @@ case $1 in
 
 			echo "branch: info: Switching to branch: $BRANCH_NAME"
 			git checkout $BRANCH_NAME
-		fi
 
+			echo "branch: info: Setting POM version 
+		fi
 		;;
+
 	"help"| "")
 		echo "This is a CI Pipeline which is versioned as part of a project.  The intent of this script is to provide a number"
 		echo "of tasks that can be called from a CI server without needing to be dependent on any one CI server."
@@ -51,6 +53,11 @@ case $1 in
 		echo "help"
 		echo "  Shows basic help screen."
 		;;
+
+	"versionPOM")
+		POM_VERSION=`grep "<version>.*SNAPSHOT</version>" pom.xml | sed -e 's/^ *\<version\>//' -e 's/SNAPSHOT.*$//'`
+		;;
+
 	*)
 		echo "The task \"$1\" is unknown.  Run"
 		echo "   $0 tasks"
