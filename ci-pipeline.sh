@@ -54,7 +54,12 @@ case $1 in
 
 	"versionPOM")
 		POM_VERSION=`grep "<version>.*SNAPSHOT</version>" pom.xml | sed -e 's/^ *\<version\>//' -e 's/SNAPSHOT.*$//'`
-		echo $POM_VERSION
+		BRANCH_NAME=`git status | grep "On branch" | cut -d \  -f 3 | sed -e 's/^RC-//'`
+		NEW_POM_VERSION="$POM_VERSION$BRANCH_NAME"
+
+		echo "versionPOM: info: POM version set to $NEW_POM_VERSION"
+		mvn versions:set -DnewVersion=$NEW_POM_VERSION
+
 		;;
 
 	*)
