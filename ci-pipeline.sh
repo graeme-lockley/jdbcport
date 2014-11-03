@@ -29,8 +29,6 @@ case $1 in
 
 			echo "branch: info: Switching to branch: $BRANCH_NAME"
 			git checkout $BRANCH_NAME
-
-			echo "branch: info: Setting POM version 
 		fi
 		;;
 
@@ -56,6 +54,7 @@ case $1 in
 
 	"versionPOM")
 		POM_VERSION=`grep "<version>.*SNAPSHOT</version>" pom.xml | sed -e 's/^ *\<version\>//' -e 's/SNAPSHOT.*$//'`
+		echo $POM_VERSION
 		;;
 
 	*)
