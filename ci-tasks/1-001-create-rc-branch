@@ -6,6 +6,8 @@ CHANGES_TO_BE_COMMITTED=`git status | grep "Changes to be committed" | wc -l`
 UNTRACKED_CHANGES=`git status | grep "Untracked files:" | wc -l`
 NEED_TO_PUSH=`git status | grep "use \"git push\" to publish your local commits" | wc -l`
 
+git status
+
 if [ $BRANCH != '1' ]
 then
 	echo "$0: error: Unable to branch as you are not on branch master"
