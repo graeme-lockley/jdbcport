@@ -8,3 +8,5 @@
 *.ear
 
 target
+
+.ci-status
