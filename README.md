@@ -21,6 +21,7 @@ included in the pipline:
 
 A couple of points:
 
+- I still need to build the crontab trigger that will kick off this pipeline.
 - I still need to build Phase 2.
 - Phase 0 and Phase 1 are automatically triggered in Jenkins following a VCS update.
 - Phase 2 will be manually triggered 
