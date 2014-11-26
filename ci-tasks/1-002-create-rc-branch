@@ -29,7 +29,7 @@ then
 	echo "$0: error: Unable to branch as you have committed changes which you need to push to the remote repository"
 	exit 1
 else
-	BRANCH_NAME=RC-`date "+%Y%m%d-%H%M%S"`
+	BRANCH_NAME=rc-`date "+%Y%m%d-%H%M%S"`
 	echo "$0: info: Branch name: $BRANCH_NAME"
 	git branch $BRANCH_NAME
 
