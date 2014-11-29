@@ -68,7 +68,7 @@ end
 
 class Task
   def self.tasks(phase_number)
-    Dir["ci-tasks/#{phase_number}-*"].map { |t| Task.new t }
+    Dir["tasks/#{phase_number}-*"].map { |t| Task.new t }
   end
 
   def initialize(name)
@@ -76,7 +76,7 @@ class Task
   end
 
   def execute
-    @success = system @name
+    @success = system "(#{@name}) > logs/#{@name}.log"
     @return_code = $?
   end
 
