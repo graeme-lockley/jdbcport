@@ -76,7 +76,8 @@ class Task
   end
 
   def execute
-    @success = system "(#{@name}) > logs/#{@name}.log"
+    script_name = @name[@name.index('/') + 1 ... @name.length()]
+    @success = system "(#{@name}) | tee logs/#{script_name}.log"
     @return_code = $?
   end
 
