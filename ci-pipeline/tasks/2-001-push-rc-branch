@@ -1,9 +1,17 @@
 #!/bin/bash
 
-git config --global push.default matching
+case "$1" in
+	"")
+		git config --global push.default matching
 
-git add pom.xml
-git add pom.xml.versionsBackup
+		git add pom.xml
+		git add pom.xml.versionsBackup
 
-git commit -m "Updated POM with release candidate's version number"
-git push -u origin `git status | grep "On branch" | cut -d " " -f 3`
+		git commit -m "Updated POM with release candidate's version number"
+		git push -u origin `git status | grep "On branch" | cut -d " " -f 3`
+		;;
+	"info")
+		echo "Push Release Candidate Branch: Adds the updated pom and backup pom into git and pushed these changes through to the remote git repo."
+		;;
+esac
+
