@@ -62,8 +62,16 @@ class Task
 
   def execute
     log_file_name = @name.sub("tasks", "logs") + ".log"
-    @success = system "(#{@name}) 2>&1 | tee #{log_file_name} ; ( exit ${PIPESTATUS[0]} )"
+    start_time = Time.new
+    open(log_file_name, "a") { |f|
+	    f.puts "Starting script: #{start_time.new.to_s}"
+    }
+    @success = system "(#{@name}) 2>&1 | tee -a #{log_file_name} ; ( exit ${PIPESTATUS[0]} )"
     @return_code = $?
+    end_time = Time.new
+    open(log_file_name, "a") { |f|
+	    f.puts "Ending script: #{end_time.new.to_s} (#{end_time - start_time}s): Return Code: #{@return_code}"
+    }
   end
 
   def name
