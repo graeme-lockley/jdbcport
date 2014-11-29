@@ -77,7 +77,7 @@ class Task
 
   def execute
     log_file_name = @name.sub("tasks", "logs") + ".log"
-    @success = system "(#{@name}) | tee #{log_file_name} ; ( exit ${PIPESTATUS[0]} )"
+    @success = system "(#{@name}) 2>&1 | tee #{log_file_name} ; ( exit ${PIPESTATUS[0]} )"
     @return_code = $?
   end
 
