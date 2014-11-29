@@ -68,7 +68,7 @@ end
 
 class Task
   def self.tasks(phase_number)
-    Dir["tasks/#{phase_number}-*"].map { |t| Task.new t }
+    Dir["ci-pipeline/tasks/#{phase_number}-*"].map { |t| Task.new t }
   end
 
   def initialize(name)
@@ -76,8 +76,8 @@ class Task
   end
 
   def execute
-    script_name = @name[@name.index('/') + 1 ... @name.length()]
-    @success = system "(#{@name}) | tee logs/#{script_name}.log"
+    log_file_name = @name.replace("tasks", "logs") + ".log"
+    @success = system "(#{@name}) | tee #{log_file_name} ; ( exit ${PIPESTATUS[0]} )"
     @return_code = $?
   end
 
