@@ -15,7 +15,6 @@ class Settings
   def reset
     @config = {}
     @config['status'] = 'ready'
-    @config['phase'] = '0'
     save_settings
   end
 
@@ -27,35 +26,21 @@ class Settings
     status == 'ready'
   end
 
-  def phase_number
-    @config['phase'].to_i
-  end
-
   def task
     @config['task']
-  end
-
-  def next_phase_number
-    phase_number + 1
-  end
-
-  def next_phase
-    @config['phase'] = (phase_number + 1).to_s
-    save_settings
   end
 
   def save_settings
     File.open('.ci-status', 'w') { |f| f.write @config.to_yaml }
   end
 
-  def set_state(phase_number, current_task, status)
-    @config['phase'] = phase_number.to_s
+  def set_state(current_task, status)
     @config['task'] = current_task
     @config['status'] = status
     save_settings
   end
 
-  def complete_phase
+  def complete
     @config.delete 'task'
     @config['status'] = 'ready'
     save_settings
@@ -67,8 +52,8 @@ class Settings
 end
 
 class Task
-  def self.tasks(phase_number)
-    Dir["ci-pipeline/tasks/#{phase_number}-*"].map { |t| Task.new t }
+  def self.tasks
+    Dir["ci-pipeline/tasks/*"].map { |t| Task.new t }
   end
 
   def initialize(name)
@@ -92,32 +77,31 @@ class Task
   def return_code
     @return_code
   end
+
+  def info
+    system "#{@name} info"
+  end
 end
 
-class Phase
-  def initialize(listener, settings, number)
+class Pipeline
+  def initialize(listener, settings)
     @listener = listener
     @settings = settings
-    @number = number
   end
 
   def tasks
-    Task.tasks @number
+    Task.tasks
   end
 
   def has_tasks?
     !tasks.empty?
   end
 
-  def number
-    @number
-  end
-
   def run
     tasks.each do |task|
       runTask(task, false)
     end
-    @settings.complete_phase
+    @settings.complete
   end
 
   def retry
@@ -130,14 +114,14 @@ class Phase
         runTask(task, failed_task == task.name)
       end
     end
-    @settings.complete_phase
+    @settings.complete
   end
 
   def runTask(task, retry_flag)
     @listener.start_task task
-    @settings.set_state(@number, task.name, 'running')
+    @settings.set_state(task.name, 'running')
     task.execute
-    @settings.set_state(@number, task.name, task.errors? ? 'failed' : 'success')
+    @settings.set_state(task.name, task.errors? ? 'failed' : 'success')
     @listener.end_task task
     exit 1 if task.errors?
   end
@@ -173,12 +157,12 @@ if ARGV.length > 0
   case ARGV[0]
     when 'run'
       if settings.ready?
-        phase = Phase.new(listener, settings, settings.next_phase_number)
+        phase = Pipeline.new(listener, settings)
 
         if phase.has_tasks?
           phase.run
         else
-          logger.info " No tasks for #{phase.number} - pipeline completed"
+          logger.info " No tasks - pipeline completed"
         end
       else
         logger.error "The pipeline failed on a previous task and cannot be run."
@@ -194,14 +178,18 @@ if ARGV.length > 0
       if settings.ready?
         logger.error "The pipeline is healthy and does not need to be recovered"
       else
-        phase = Phase.new(listener, settings, settings.phase_number)
+        phase = Pipeline.new(listener, settings)
 
         if phase.has_tasks?
           phase.retry
         else
-          logger.info "No tasks for #{phase.number} - pipeline completed"
+          logger.info "No tasks - pipeline completed"
         end
       end
+    when 'info'
+      Task.tasks.each{ |task| 
+        task.info
+      }
     else
       logger.error "Unknown command #{ARGV[0]}"
       exit 1
@@ -210,7 +198,7 @@ else
   logger.error "Argument expected"
   logger.info "  reset - resets the pipeline's state so that it can be re-run."
   logger.info "  retry - retries to run the pipeline from the previously failed task."
-  logger.info "  run - runs the next phase of the pipeline.  If the pipeline previously failed then this command will itself fail."
+  logger.info "  run - runs the pipeline.  If the pipeline previously failed then this command will itself fail."
   logger.info "  status - shows the status of the pipeline."
   exit 1
 end
