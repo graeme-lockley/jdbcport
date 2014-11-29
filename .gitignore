@@ -9,5 +9,5 @@
 
 target
 
-ci-pipeline/.ci-status
+.ci-status
 ci-pipeline/logs/*
