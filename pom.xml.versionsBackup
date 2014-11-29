@@ -11,7 +11,7 @@
     <groupId>za.co.no9</groupId>
     <artifactId>jdbcport</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-20141129-092910</version>
+    <version>1.0-SNAPSHOT</version>
     <name>jdbcport</name>
     <description>A (very) simple ORM to support a hexagonal architecture style using a simple abstraction of database-table-row with associated CRUD operations.</description>
     <url>https://github.com/graeme-lockley/jdbcport</url>
