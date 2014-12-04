@@ -26,6 +26,9 @@ A couple of points:
 Items still to be done:
 
 - Phase 1's scripts still need to be written.
-- Ensure that the results of the scripts are logged.
-- Allow the pipeline scripts to be self describing.
+
+Features:
+
+- All scripts are logged.
+- The pipeline scripts to be self describing.
 
